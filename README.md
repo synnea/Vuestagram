@@ -1,4 +1,8 @@
-# vuestagram
+# Vuestagram
+
+Vuestagram is a Vue.js app that utilizes the axios library to fetch the latest 20 posts from the @artnightevents Instagram account and display them in a fluid grid.
+
+The feed is cached locally and is valid for an hour.
 
 ## Project setup
 ```
