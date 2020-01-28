@@ -1,4 +1,3 @@
-  
 <template>
 
   <div class="container">
@@ -10,9 +9,11 @@
         <div v-if="post.is_video">
 
           <div class="panel hvr-grow" >
-             <v-lazy-image :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo"
-                 src-placeholder="https://cdn-images-1.medium.com/max/80/1*xjGrvQSXvj72W4zD6IWzfg.jpeg"
-                 />
+
+      <LazyImage
+        class="img-fluid"
+        :source="post.display_url"
+      />
             <div class="views"><h5><i class="fas fa-play"></i> {{ post.video_view_count }} </h5></div>
           </div>
 
@@ -20,7 +21,10 @@
 
         <div v-else>
           <div class="panel hvr-grow">
-            <v-lazy-image :src="post.display_url" class="img-fluid" alt="instagram-image-feed-photo" />
+      <LazyImage
+        class="img-fluid"
+        :source="post.display_url"
+      />
 
              <div class="likes"><h5><i class="fas fa-heart"></i> {{post.edge_liked_by.count }}</h5></div>
 
@@ -46,9 +50,13 @@
 <script>
   import axios from 'axios';
   import _ from 'lodash'; 
+  import LazyImage from './LazyImage.vue';
 
   export default {
-    name: 'InstagramFeed',
+  name: 'InstagramFeed',
+  components: {
+    LazyImage,
+  },
   data () {
     return {
       imagePosts: [],
@@ -197,7 +205,7 @@ console.log("returnPostArray hit")
   max-width: 1335px;
   margin: 0 auto;
   padding: 10vh;
-  padding-top: 5vh;
+  padding-top: 10vh;
 }
 .grid-row {
   display: flex;
@@ -222,11 +230,19 @@ console.log("returnPostArray hit")
 .img-fluid {
   max-height: 100%;
   max-width: 100%;
-  height: auto;
+  min-height: 300px;
   width: auto;
   border-top: 1px solid grey;
   border-left: 1px solid grey;
   border-right: 1px solid grey;
+}
+
+@media (max-width: 768px) {
+  .img-fluid {
+
+
+  min-height: 100px;
+    }
 }
 
 .likes {
