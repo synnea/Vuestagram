@@ -27,11 +27,13 @@
   data () {
     return {
       imagePosts: [],
-      videoPosts: []
+      videoPosts: [],
+      errored: false,
+      loading: true
     }
   },
 
-  mounted () {
+  created () {
       this.fetchPosts();
   },
 
