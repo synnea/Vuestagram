@@ -1,12 +1,13 @@
+  
 <template>
 
-<div class="container">
+  <div class="container">
+    <h3 class="headline">Instagram Feed</h3>
 
-  <h3>Instagram Feed</h3>
+    <div class="grid-row">
+      <div v-for="post in renderPosts" v-bind:key="post.id">
 
-    <div v-for="post in renderPosts" v-bind:key="post.id">
-
-       <div v-if="post.is_video">
+        <div v-if="post.is_video">
 
           <div class="panel">
              <img :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo" />
@@ -23,7 +24,10 @@
           </div>
         </div>
 
+
       </div>
+
+    </div>
 
     <section v-if="errored">
     <p>We're sorry, we're not able to retrieve this information at the moment,
@@ -33,8 +37,9 @@
   <section v-else>
     <div v-if="loading">Loading...</div>
     </section>
-
   </div>
+
+
 </template>
 
 <script>
@@ -115,19 +120,42 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+<style>
+  h3 {
+    margin-bottom: 5%;
+  }
+  .headline {
+  font-family: 'Zhi Mang Xing', cursive;
+  font-size: 4rem;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+  .container {
+  max-width: 1335px;
+  margin: 0 auto;
+  padding: 10vh;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.grid-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
 }
-a {
-  color: #42b983;
+.panel {
+  font-family: 'Segoe UI', sans-serif;
+  max-height: 550px;
+  flex-basis: 20%;
+  -ms-flex: auto;
+  flex: auto;
+  max-width: 350px;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.img-fluid {
+  max-height: 100%;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  border-top: 1px solid grey;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
 }
 </style>
