@@ -229,6 +229,9 @@
   .img-fluid {
       min-height: 100px;
   }
+  .container {
+    margin-top: 5vh;
+  }
 
 }
 
