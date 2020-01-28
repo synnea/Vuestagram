@@ -43,24 +43,21 @@
 
   computed: {
     renderPosts: function () {
-      // receives the image and video posts, concatenates, cleans, orders and returns them.
+      // 
         if (this.videoPosts.length && this.imagePosts.length) {
           let allPosts = this.imagePosts.concat(this.videoPosts)
-          let allPostsShelled = allPosts.map(obj => obj.node )
-          let allPostsOrdered = _.orderBy(allPostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
-          console.log(allPostsOrdered)
-          return allPostsOrdered
+
+          return this.returnPostArray(allPosts)
 
           // if either video or image post arrays are empty, return only the values for the existing array.
-          // Note: this function is needlessly bloated and needs refactoring. This method was chosen as a temporary solution due to time constraints.       
+
           } else if (this.videoPosts.length && !this.imagePosts.length) {
-          videoPostsShelled = videoPosts.map(obj => obj.node)
-          let allVideoPostsOrdered = _.orderBy(videoPostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
-          return allVideoPostsOrdered
+          let allPosts = this.videoPosts
+          return this.returnPostArray(allPosts)
+
         } else if (!this.videoPosts.length && this.imagePosts.length) {
-          imagePostsShelled = imagePosts.map(obj => obj.node)
-          let allImagePostsOrdered = _.orderBy(imagePostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
-          return allImagePostsOrdered
+          let allPosts = this.imagePosts
+          return this.returnPostArray(allPosts)
         }
         else {
           return this.raiseError()
@@ -87,6 +84,15 @@
       raiseError() {
         // gets called if both video and image post arrays were returned empty.
         this.errored = true;
+      },
+
+      returnPostArray(arg) {
+        // receives the correct posts from renderPosts, shells and orders them.
+
+        let allPostsShelled = arg.map(obj => obj.node)
+        let allPostsOrdered = _.orderBy(allPostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
+        return allPostsOrdered
+
       }
   }
   }
