@@ -10,7 +10,9 @@
         <div v-if="post.is_video">
 
           <div class="panel hvr-grow" >
-             <img :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo">
+             <v-lazy-image :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo"
+                 src-placeholder="https://cdn-images-1.medium.com/max/80/1*xjGrvQSXvj72W4zD6IWzfg.jpeg"
+                 />
             <div class="views"><h5><i class="fas fa-play"></i> {{ post.video_view_count }} </h5></div>
           </div>
 
@@ -18,7 +20,7 @@
 
         <div v-else>
           <div class="panel hvr-grow">
-            <img :src="post.display_url" class="img-fluid" alt="instagram-image-feed-photo" />
+            <v-lazy-image :src="post.display_url" class="img-fluid" alt="instagram-image-feed-photo" />
 
              <div class="likes"><h5><i class="fas fa-heart"></i> {{post.edge_liked_by.count }}</h5></div>
 
