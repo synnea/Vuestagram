@@ -6,7 +6,22 @@
 
     <div v-for="post in renderPosts" v-bind:key="post.id">
 
-{{ post }}
+       <div v-if="post.is_video">
+
+          <div class="panel">
+             <img :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo" />
+            <h3>Views: {{ post.video_view_count }} </h3></div>
+
+        </div>
+
+        <div v-else>
+          <div class="panel">
+            <img :src="post.display_url" class="img-fluid" alt="instagram-image-feed-photo" />
+
+            <h3>Likes: {{post.edge_liked_by.count }}</h3>
+
+          </div>
+        </div>
 
       </div>
 
