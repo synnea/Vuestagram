@@ -9,7 +9,7 @@
 
         <div v-if="post.is_video">
 
-          <div class="panel" >
+          <div class="panel hvr-grow" >
              <img :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo">
             <div class="views"><h5><i class="fas fa-play"></i> {{ post.video_view_count }} </h5></div>
           </div>
@@ -17,15 +17,13 @@
         </div>
 
         <div v-else>
-          <div class="panel">
+          <div class="panel hvr-grow">
             <img :src="post.display_url" class="img-fluid" alt="instagram-image-feed-photo" />
 
              <div class="likes"><h5><i class="fas fa-heart"></i> {{post.edge_liked_by.count }}</h5></div>
 
           </div>
         </div>
-
-
       </div>
 
     </div>
@@ -62,16 +60,27 @@
   this.compareCache();
   },
 
-  mounted () {
-      this.fetchPosts();
-  },
-
   computed: {
+
     renderPosts: function () {
 
+      console.log("we hit renderPosts")
 
+      if (this.cached === true) {
 
+        // if the cached flag has been set to true, retrieve value from cache.
+        console.log("cached is true, so we return the value from ls")
+        let localStorageString = JSON.parse(localStorage.getItem("feed"))
+        let allPostsOrdered = localStorageString.value
+        return allPostsOrdered
+      }
+
+      else {
+          // if cached is false, retrieve the data from the API response
+
+console.log("cached is not true")
         if (this.videoPosts.length && this.imagePosts.length) {
+          console.log("image and video posts available")
           let allPosts = this.imagePosts.concat(this.videoPosts)
 
           return this.returnPostArray(allPosts)
@@ -87,8 +96,12 @@
           return this.returnPostArray(allPosts)
         }
         else {
-          return this.raiseError()
+          console.log("raiseError hit")
+          return this.load()
         }
+
+        }
+
       },    
   },
 
@@ -96,7 +109,7 @@
         fetchPosts() {
               // makes the API call and saves the response.
     axios
-        .get('http://localhost:8080/artnight.json')
+        .get('https://www.instagram.com/artnightevents/?__a=1')
         .then((response) => {
         this.imagePosts = response.data.graphql.user.edge_owner_to_timeline_media.edges;
         this.videoPosts = response.data.graphql.user.edge_felix_video_timeline.edges; })
@@ -108,25 +121,59 @@
 
           },
 
-      raiseError() {
-        // gets called if both video and image post arrays were returned empty.
-        this.errored = true;
+      load() {
+        // gets called if both video and image post arrays were returned empty, which means that the API call
+        // has not happened yet.
+        this.loading = true;
       },
 
       returnPostArray(arg) {
-        // receives the correct posts from renderPosts, shells and orders them.
+        // receives the correct posts from renderPosts and then shells and orders them.
+        // Also saves the to-render array along with the timestamp + 1 hour to localStorage.
 
+console.log("returnPostArray hit")
         let allPostsShelled = arg.map(obj => obj.node)
         let allPostsOrdered = _.orderBy(allPostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
 
-        let feed = {value: all_posts_ordered, expiry: ((new Date().getTime()) + 60*60*1000)}
+        let feed = {value: allPostsOrdered, expiry: ((new Date().getTime()) + 60*60*1000)}
         localStorage.setItem('feed', JSON.stringify(feed))
-        
+
         return allPostsOrdered
 
-      }
-  }
-  }
+      },
+
+    compareCache() {
+
+      // checks if the feed is already in localStorage and if the expiry date is in the future.
+      // if either condition is untrue, a new API call is made.
+
+          console.log("we're hitting compareCache")
+          if (localStorage.getItem("feed") !== null) {
+            console.log("ls is not null")
+            let now = new Date().getTime()
+            let localStorageString = JSON.parse(localStorage.getItem("feed"))
+            let expiry = localStorageString.expiry
+            console.log("now:" + now)
+            console.log("expiry:" + expiry)
+            if (now < expiry) {
+              console.log("now is less than expiry")
+                this.cached = true
+            } else {
+              console.log("now is not less than expiry")
+              this.cached = false
+              localStorage.removeItem('feed');
+              this.fetchPosts();
+            }
+          } else {
+            console.log("the local storage is empty")
+            this.cached = false
+            this.fetchPosts();
+          }
+        }
+      
+      },
+    }
+
 
 </script>
 
@@ -166,6 +213,7 @@
   padding: 20px;
   box-sizing: border-box;
 }
+
 .spacer-panel {
   width: 350px;
 }
