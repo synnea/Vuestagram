@@ -58,13 +58,19 @@
     }
   },
 
+    created () {
+  this.compareCache();
+  },
+
   mounted () {
       this.fetchPosts();
   },
 
   computed: {
     renderPosts: function () {
-      // 
+
+
+
         if (this.videoPosts.length && this.imagePosts.length) {
           let allPosts = this.imagePosts.concat(this.videoPosts)
 
@@ -112,6 +118,10 @@
 
         let allPostsShelled = arg.map(obj => obj.node)
         let allPostsOrdered = _.orderBy(allPostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
+
+        let feed = {value: all_posts_ordered, expiry: ((new Date().getTime()) + 60*60*1000)}
+        localStorage.setItem('feed', JSON.stringify(feed))
+        
         return allPostsOrdered
 
       }
