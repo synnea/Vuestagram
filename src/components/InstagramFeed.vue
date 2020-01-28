@@ -4,6 +4,10 @@
 
   <h3>Instagram Feed</h3>
 
+  <div v-for="post in imagePosts" v-bind:key="post.id">
+{{ post }}
+    </div>
+
     <section v-if="errored">
     <p>We're sorry, we're not able to retrieve this information at the moment,
       please try back later</p>
@@ -28,20 +32,23 @@
   },
 
   mounted () {
+      this.fetchPosts();
+  },
 
-    fetchPosts: {
+  methods: {
+        fetchPosts() {
     axios
         .get('http://localhost:8080/artnight.json')
         .then((response) => {
-        this.image_posts = response.data.graphql.user.edge_owner_to_timeline_media.edges;
-        this.video_posts = response.data.graphql.user.edge_felix_video_timeline.edges; })
+        this.imagePosts = response.data.graphql.user.edge_owner_to_timeline_media.edges;
+        this.videoPosts = response.data.graphql.user.edge_felix_video_timeline.edges; })
         .catch(error => {
         console.log(error);
         this.errored = true;
       })
       .finally(() => this.loading = false);
 
-          };
+          },
   }
   }
 
