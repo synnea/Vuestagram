@@ -9,9 +9,10 @@
 
         <div v-if="post.is_video">
 
-          <div class="panel">
-             <img :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo" />
-            <h3>Views: {{ post.video_view_count }} </h3></div>
+          <div class="panel" >
+             <img :src="post.display_url" class="img-fluid" alt="instagram-video-feed-photo">
+            <div class="views"><h5><i class="fas fa-play"></i> {{ post.video_view_count }} </h5></div>
+          </div>
 
         </div>
 
@@ -19,7 +20,7 @@
           <div class="panel">
             <img :src="post.display_url" class="img-fluid" alt="instagram-image-feed-photo" />
 
-            <h3>Likes: {{post.edge_liked_by.count }}</h3>
+             <div class="likes"><h5><i class="fas fa-heart"></i> {{post.edge_liked_by.count }}</h5></div>
 
           </div>
         </div>
@@ -120,9 +121,14 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style css>
   h3 {
     margin-bottom: 5%;
+  }
+
+  h5 {
+    margin: 0;
+    padding: 0;
   }
   .headline {
   font-family: 'Zhi Mang Xing', cursive;
@@ -132,6 +138,7 @@
   max-width: 1335px;
   margin: 0 auto;
   padding: 10vh;
+  padding-top: 5vh;
 }
 .grid-row {
   display: flex;
@@ -149,6 +156,9 @@
   padding: 20px;
   box-sizing: border-box;
 }
+.spacer-panel {
+  width: 350px;
+}
 .img-fluid {
   max-height: 100%;
   max-width: 100%;
@@ -157,5 +167,15 @@
   border-top: 1px solid grey;
   border-left: 1px solid grey;
   border-right: 1px solid grey;
+}
+
+.likes {
+  background-color: #D72D78;
+  padding: 5px;
+}
+
+.views {
+  background-color: #0066FF;
+  padding: 5px;
 }
 </style>
