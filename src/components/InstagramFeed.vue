@@ -74,12 +74,9 @@
 
     renderPosts: function () {
 
-      console.log("we hit renderPosts")
-
       if (this.cached === true) {
 
         // if the cached flag has been set to true, retrieve value from cache.
-        console.log("cached is true, so we return the value from ls")
         let localStorageString = JSON.parse(localStorage.getItem("feed"))
         let allPostsOrdered = localStorageString.value
         return allPostsOrdered
@@ -88,9 +85,7 @@
       else {
           // if cached is false, retrieve the data from the API response
 
-console.log("cached is not true")
         if (this.videoPosts.length && this.imagePosts.length) {
-          console.log("image and video posts available")
           let allPosts = this.imagePosts.concat(this.videoPosts)
 
           return this.returnPostArray(allPosts)
@@ -106,7 +101,6 @@ console.log("cached is not true")
           return this.returnPostArray(allPosts)
         }
         else {
-          console.log("raiseError hit")
           return this.load()
         }
 
@@ -141,12 +135,13 @@ console.log("cached is not true")
         // receives the correct posts from renderPosts and then shells and orders them.
         // Also saves the to-render array along with the timestamp + 1 hour to localStorage.
 
-console.log("returnPostArray hit")
         let allPostsShelled = arg.map(obj => obj.node)
         let allPostsOrdered = _.orderBy(allPostsShelled, ["taken_at_timestamp"], ["desc"]).slice(0,20)
 
         let feed = {value: allPostsOrdered, expiry: ((new Date().getTime()) + 60*60*1000)}
         localStorage.setItem('feed', JSON.stringify(feed))
+
+        this.loading = false
 
         return allPostsOrdered
 
@@ -157,25 +152,18 @@ console.log("returnPostArray hit")
       // checks if the feed is already in localStorage and if the expiry date is in the future.
       // if either condition is untrue, a new API call is made.
 
-          console.log("we're hitting compareCache")
           if (localStorage.getItem("feed") !== null) {
-            console.log("ls is not null")
             let now = new Date().getTime()
             let localStorageString = JSON.parse(localStorage.getItem("feed"))
             let expiry = localStorageString.expiry
-            console.log("now:" + now)
-            console.log("expiry:" + expiry)
             if (now < expiry) {
-              console.log("now is less than expiry")
                 this.cached = true
             } else {
-              console.log("now is not less than expiry")
               this.cached = false
               localStorage.removeItem('feed');
               this.fetchPosts();
             }
           } else {
-            console.log("the local storage is empty")
             this.cached = false
             this.fetchPosts();
           }
@@ -239,10 +227,9 @@ console.log("returnPostArray hit")
 
 @media (max-width: 768px) {
   .img-fluid {
+      min-height: 100px;
+  }
 
-
-  min-height: 100px;
-    }
 }
 
 .likes {
