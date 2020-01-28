@@ -62,7 +62,8 @@
       imagePosts: [],
       videoPosts: [],
       errored: false,
-      loading: true
+      loading: true,
+      useCachedData: false
     }
   },
 
@@ -74,16 +75,16 @@
 
     renderPosts: function () {
 
-      if (this.cached === true) {
+      if (this.useCachedData === true) {
 
-        // if the cached flag has been set to true, retrieve value from cache.
+        // if the useCachedData flag has been set to true, retrieve value from cache.
         let localStorageString = JSON.parse(localStorage.getItem("feed"))
         let allPostsOrdered = localStorageString.value
         return allPostsOrdered
       }
 
       else {
-          // if cached is false, retrieve the data from the API response
+          // if useCachedData is false, retrieve the data from the API response
 
         if (this.videoPosts.length && this.imagePosts.length) {
           let allPosts = this.imagePosts.concat(this.videoPosts)
@@ -157,21 +158,20 @@
             let localStorageString = JSON.parse(localStorage.getItem("feed"))
             let expiry = localStorageString.expiry
             if (now < expiry) {
-                this.cached = true
+                this.useCachedData = true
             } else {
-              this.cached = false
+              this.useCachedData = false
               localStorage.removeItem('feed');
               this.fetchPosts();
             }
           } else {
-            this.cached = false
+            this.useCachedData = false
             this.fetchPosts();
           }
         }
       
       },
     }
-
 
 </script>
 
