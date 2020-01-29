@@ -27,6 +27,10 @@ The project uses the Intersection Observer API to lazy load the images at the bo
 
 HTML5, CSS3, JavaScript, Vue.js, Axios.
 
+## Credits
+
+Code for the lazy load implementation was taken from https://alligator.io/vuejs/lazy-image/
+
 ### installs
 ```
 npm install
