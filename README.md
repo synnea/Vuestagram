@@ -27,6 +27,7 @@ The project uses the Intersection Observer API to lazy load the images at the bo
 
 HTML5, CSS3, JavaScript, Vue.js, Axios.
 
+### installs
 ```
 npm install
 ```
